@@ -1,0 +1,43 @@
+# Visual Studio 관련
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# 빌드 결과물
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+
+# 테스트 결과
+TestResult*/
+*.TestResults
+
+# 패키지
+*.nupkg
+packages/
+*.snupkg
+
+# 프로젝트 설정 파일
+*.rsuser
+*.userprefs
+
+# 데이터베이스
+*.mdf
+*.ldf
+
+# 백업 및 임시 파일
+*.bak
+*.tmp
+*.temp
+*.log
+
+# 기타 IDE/툴 관련
+_ReSharper*/
+*.DotSettings.user
+*.idea/
+.vscode/
+
+appsettings.json

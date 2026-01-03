@@ -1,0 +1,166 @@
+﻿using ReviewByWpf.Helpers;
+using ReviewByWpf.Models;
+using ReviewByWpf.Services;
+using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Input;
+
+namespace ReviewByWpf.ViewModles
+{
+    public class ReviewViewModel : BaseViewModel
+    {
+        private readonly IReviewRepository _repository;
+
+        // 읽기 전용 속성
+        public IReviewRepository Repository => _repository;
+
+        public ObservableCollection<Review> Reviews { get; set; }
+        public ObservableCollection<Category> Categories { get; set; }
+
+        private Review _selectedReview;
+        public Review SelectedReview
+        {
+            get => _selectedReview;
+            set
+            {
+                if (SetProperty(ref _selectedReview, value))
+                {
+                    Title = _selectedReview?.Title;
+                    Content = _selectedReview?.Content;
+                    PosterUrl = _selectedReview?.PosterPath;
+                }
+            }
+        }
+
+        private string _searchKeyword;
+
+        public string SearchKeyword
+        {
+            get => _searchKeyword;
+            set => SetProperty(ref _searchKeyword, value);
+        }
+
+        private Category _selectedCategory;
+        public Category SelectedCategory
+        {
+            get => _selectedCategory;
+            set
+            {
+                if (SetProperty(ref _selectedCategory, value))
+                {
+                    LoadReviewsByCategory(_selectedCategory?.Id);
+                }
+            }                
+        }
+
+        private string _title;
+        public string Title
+        {
+            get => _title;
+            set => SetProperty(ref _title, value);
+        }
+
+        private string _content;
+        public string Content
+        {
+            get => _content;
+            set => SetProperty(ref _content, value);
+        }
+
+        private string _posterUrl;
+        public string PosterUrl
+        {
+            get => _posterUrl;
+            set => SetProperty(ref _posterUrl, value);
+        }
+
+        public ICommand SearchCommand { get; }
+        public ICommand UpdateCommand { get; }
+        public ICommand DeleteCommand { get; }
+
+        public ReviewViewModel(IReviewRepository repository)
+        {
+            _repository = repository;
+
+            Reviews = new ObservableCollection<Review>();
+
+            // 카테고리 초기화
+            Categories = new ObservableCollection<Category>
+            {
+                new Category { Id = 1, Name = "영화"},
+                new Category { Id = 2, Name = "드라마"},
+                new Category { Id = 3, Name = "애니"},
+                new Category { Id = 4, Name = "도서"}
+            };
+
+            // 기본 카테고리 설정
+            SelectedCategory = Categories[0];
+
+            SearchCommand = new RelayCommand(Search, CanSearch);
+            UpdateCommand = new RelayCommand(Update, CanUpdate);
+            DeleteCommand = new RelayCommand(Delete, CanDelete);
+        }
+
+        private void Search(object parameter)
+        {
+            var results = _repository.GetReviews()
+                .Where(r => r.Title.Contains(SearchKeyword) || r.Content.Contains(SearchKeyword));
+            Reviews.Clear();
+            foreach (var r in results)
+                Reviews.Add(r);
+        }
+
+        private bool CanSearch(object parameter)
+        {
+            return !string.IsNullOrWhiteSpace(SearchKeyword);
+        }
+
+        private void Update(object parameter)
+        {
+            _repository.UpdateReview(SelectedReview.Id, Content, PosterUrl, Title);
+
+            SelectedReview.Content = Content;
+            SelectedReview.PosterPath = PosterUrl;
+            SelectedReview.Title = Title;
+        }
+
+        private bool CanUpdate(object parameter)
+        {
+            return !string.IsNullOrWhiteSpace(Content) && !string.IsNullOrWhiteSpace(PosterUrl);
+        }
+
+        private void Delete(object parameter)
+        {
+            if (SelectedReview != null)
+            {
+                var result = MessageBox.Show("정말 삭제하시겠습니까?", "삭제 확인",
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    // DB 삭제
+                    _repository.DeleteReview(SelectedReview.Id);
+                    // 목록 갱신
+                    LoadReviewsByCategory(SelectedCategory.Id);
+                    // 하단 컨트롤 데이터 제거
+                    SelectedReview = null;
+                }
+            }
+        }
+
+        private bool CanDelete(object parameter)
+        {
+            return SelectedReview != null;
+        }
+
+        public void LoadReviewsByCategory(int? categoryId)
+        {
+            var results = _repository.GetReviews()
+                .Where(r => !categoryId.HasValue || r.CategoryId == categoryId.Value);
+
+            Reviews.Clear();
+            foreach (var r in results)
+                Reviews.Add(r);
+        }
+    }
+}
