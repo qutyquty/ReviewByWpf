@@ -50,6 +50,7 @@ namespace ReviewByWpf.Views
             if (insertWindow.ShowDialog() == true)
             {
                 mainVM?.LoadReviewsByCategory(selectedCategoryId);
+                mainVM.StatusMessage = $"저장 완료";
             }
         }
     }

@@ -11,6 +11,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="400" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         
         <!-- 검색 영역 -->
@@ -24,7 +25,8 @@
                       DisplayMemberPath="Name"
                       SelectedValuePath="Id" />
 
-            <Button Content="리뷰 등록" Width="200" Margin="10,0,0,0" Click="OpenInsertWindowButton_Click" />
+            <Button Content="리뷰 등록" Width="100" Margin="10,0,0,0" Click="OpenInsertWindowButton_Click" />
+            <Button Content="DB 백업" Width="100" Margin="10,0,0,0" Command="{Binding BackupCommand}" />
         </StackPanel>
         
         <!-- 데이터그리드 -->
@@ -72,5 +74,9 @@
                          VerticalScrollBarVisibility="Auto" />
             </Grid>
         </Border>
+
+        <TextBlock Grid.Row="3" Text="{Binding StatusMessage}"
+                   Background="LightBlue" Foreground="DarkBlue"
+                   FontWeight="Bold" Padding="5"/>
     </Grid>
 </Window>

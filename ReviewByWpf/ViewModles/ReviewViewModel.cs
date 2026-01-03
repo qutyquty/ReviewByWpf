@@ -9,6 +9,8 @@ namespace ReviewByWpf.ViewModles
 {
     public class ReviewViewModel : BaseViewModel
     {
+        private readonly MySqlBackupService _backupService;
+
         private readonly IReviewRepository _repository;
 
         // 읽기 전용 속성
@@ -74,12 +76,24 @@ namespace ReviewByWpf.ViewModles
             set => SetProperty(ref _posterUrl, value);
         }
 
+        private string _statusMessage;
+
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set => SetProperty(ref _statusMessage, value);
+        }
+
+
         public ICommand SearchCommand { get; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
+        public ICommand BackupCommand { get; }
 
         public ReviewViewModel(IReviewRepository repository)
         {
+            _backupService = new MySqlBackupService();
+
             _repository = repository;
 
             Reviews = new ObservableCollection<Review>();
@@ -99,6 +113,7 @@ namespace ReviewByWpf.ViewModles
             SearchCommand = new RelayCommand(Search, CanSearch);
             UpdateCommand = new RelayCommand(Update, CanUpdate);
             DeleteCommand = new RelayCommand(Delete, CanDelete);
+            BackupCommand = new RelayCommand(BackupDatabase, CanBackupDatabase);
         }
 
         private void Search(object parameter)
@@ -122,6 +137,8 @@ namespace ReviewByWpf.ViewModles
             SelectedReview.Content = Content;
             SelectedReview.PosterPath = PosterUrl;
             SelectedReview.Title = Title;
+
+            StatusMessage = $"수정 완료";
         }
 
         private bool CanUpdate(object parameter)
@@ -144,6 +161,8 @@ namespace ReviewByWpf.ViewModles
                     LoadReviewsByCategory(SelectedCategory.Id);
                     // 하단 컨트롤 데이터 제거
                     SelectedReview = null;
+
+                    StatusMessage = $"삭제 완료";
                 }
             }
         }
@@ -151,6 +170,17 @@ namespace ReviewByWpf.ViewModles
         private bool CanDelete(object parameter)
         {
             return SelectedReview != null;
+        }
+
+        private void BackupDatabase(object parameter)
+        {
+            string file = _backupService.BackupDatabase("db_review_user", "1234", "db_review");
+            StatusMessage = $"백업 완료: {file}";
+        }
+
+        private bool CanBackupDatabase(object parameter)
+        {
+            return true;
         }
 
         public void LoadReviewsByCategory(int? categoryId)
