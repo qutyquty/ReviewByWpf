@@ -30,6 +30,8 @@ namespace ReviewByWpf.ViewModles
                     Title = _selectedReview?.Title;
                     Content = _selectedReview?.Content;
                     PosterUrl = _selectedReview?.PosterPath;
+                    FirstYear = _selectedReview?.FirstYear;
+                    TmdbId = _selectedReview?.TmdbId;
                 }
             }
         }
@@ -74,6 +76,20 @@ namespace ReviewByWpf.ViewModles
         {
             get => _posterUrl;
             set => SetProperty(ref _posterUrl, value);
+        }
+
+        private string _firstYear;
+        public string FirstYear
+        {
+            get => _firstYear;
+            set => SetProperty(ref _firstYear, value);
+        }
+
+        private string _tmdbId;
+        public string TmdbId
+        {
+            get => _tmdbId;
+            set => SetProperty(ref _tmdbId, value);
         }
 
         private string _statusMessage;
@@ -132,11 +148,13 @@ namespace ReviewByWpf.ViewModles
 
         private void Update(object parameter)
         {
-            _repository.UpdateReview(SelectedReview.Id, Content, PosterUrl, Title);
+            _repository.UpdateReview(SelectedReview.Id, Content, PosterUrl, Title, FirstYear, TmdbId);
 
             SelectedReview.Content = Content;
             SelectedReview.PosterPath = PosterUrl;
             SelectedReview.Title = Title;
+            SelectedReview.FirstYear = FirstYear;
+            SelectedReview.TmdbId = TmdbId;
 
             StatusMessage = $"수정 완료";
         }

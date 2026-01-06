@@ -13,6 +13,8 @@ namespace ReviewByWpf.Models
         public string? Title { get; set; }
         public string? Content { get; set; }
         public string? PosterPath { get; set; }
+        public string? FirstYear { get; set; }
+        public string? TmdbId { get; set; }
         public DateTime? CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
     }

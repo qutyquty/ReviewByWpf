@@ -26,7 +26,7 @@ namespace ReviewByWpf.Services
                 conn.Open();
                 string query = "SELECT " +
                     "id, title, content, poster_path, " + 
-                    "created_time, updated_time, category_id " +
+                    "created_time, updated_time, category_id, first_year, tmdb_id " +
                     "FROM review " +
                     "ORDER BY id DESC";
                 using (var cmd = new MySqlCommand(query, conn))
@@ -42,7 +42,9 @@ namespace ReviewByWpf.Services
                             PosterPath = reader.IsDBNull(reader.GetOrdinal("poster_path"))? "" : reader.GetString("poster_path"),
                             CreatedTime = reader.IsDBNull(reader.GetOrdinal("created_time")) ? DateTime.MinValue : reader.GetDateTime("created_time"),
                             UpdatedTime = reader.IsDBNull(reader.GetOrdinal("updated_time")) ? DateTime.MinValue : reader.GetDateTime("updated_time"),
-                            CategoryId = reader.IsDBNull(reader.GetOrdinal("category_id")) ? 0 : reader.GetInt32("category_id")
+                            CategoryId = reader.IsDBNull(reader.GetOrdinal("category_id")) ? 0 : reader.GetInt32("category_id"),
+                            FirstYear = reader.IsDBNull(reader.GetOrdinal("first_year")) ? "" : reader.GetString("first_year"),
+                            TmdbId = reader.IsDBNull(reader.GetOrdinal("tmdb_id")) ? "" : reader.GetInt32("tmdb_id").ToString()
                         });
                     }
                 }                
@@ -80,7 +82,7 @@ namespace ReviewByWpf.Services
             return null;
         }
 
-        public void UpdateReview(int id, string content, string posterUrl, string title)
+        public void UpdateReview(int id, string content, string posterUrl, string title, string firstYear, string tmdbId)
         {
             using (var conn = new MySqlConnection(connectionString))
             {
@@ -89,6 +91,8 @@ namespace ReviewByWpf.Services
                     "content=@content, " +
                     "poster_path=@posterPath, " +
                     "title=@title, " +
+                    "first_year=@firstYear, " +
+                    "tmdb_id=@TmdbId, " +
                     "updated_time=NOW() " +
                     "WHERE id=@id";
                 using (var cmd = new MySqlCommand(query, conn))
@@ -96,6 +100,8 @@ namespace ReviewByWpf.Services
                     cmd.Parameters.AddWithValue("@content", content);
                     cmd.Parameters.AddWithValue("@posterPath", posterUrl);
                     cmd.Parameters.AddWithValue("@title", title);
+                    cmd.Parameters.AddWithValue("@firstYear", firstYear);
+                    cmd.Parameters.AddWithValue("@TmdbId", tmdbId);
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.ExecuteNonQuery();
                 }

@@ -15,6 +15,8 @@ namespace ReviewByWpf.Views
     public partial class TmdbSearchWindow : Window
     {
         public string SelectedPosterUrl { get; private set; }
+        public string SelectedFirstYear { get; private set; }
+        public string SelectedTmdbId { get; set; }
 
         public TmdbSearchWindow()
         {
@@ -41,6 +43,24 @@ namespace ReviewByWpf.Views
 
                 foreach (var mt in result.results)
                 {
+                    // 개봉/첫방영년도 가져오기
+                    string firstDate = "";
+                    string firstYear = "";
+                    string mediaType = mt.media_type;
+                    if (mediaType == "movie")
+                    {
+                        firstDate = mt.release_date;
+                    } else if (mediaType == "tv")
+                    {
+                        firstDate = mt.first_air_date;
+                    }
+                    if (!string.IsNullOrEmpty(firstDate))
+                        firstYear = firstDate.Substring(0, 4);
+
+                    // tmdb id 가져오기
+                    string tmdbId = mt.id;
+
+                    // 포스터 가져오기
                     string posterPath = mt.poster_path;
                     if (posterPath != null)
                     {
@@ -51,7 +71,9 @@ namespace ReviewByWpf.Views
                             Height = 220,
                             Margin = new Thickness(5),
                             Source = new BitmapImage(new Uri(posterUrl)),
-                            Tag = posterUrl
+                            //Tag = posterUrl,
+                            //ToolTip = firstYear,                            
+                            Tag = (posterUrl, firstYear, tmdbId)
                         };
 
                         Border border = new Border
@@ -75,7 +97,7 @@ namespace ReviewByWpf.Views
 
         private void PosterImage_Click(object sender, MouseButtonEventArgs e)
         {
-            if (sender is Image img && img.Tag is string url)
+            if (sender is Image img)
             {
                 // 모든 포스터 테두리 초기화
                 foreach (var child in PosterPanel.Children)
@@ -87,7 +109,15 @@ namespace ReviewByWpf.Views
                     }
                 }
 
-                SelectedPosterUrl = url;
+                if (img.Tag is ValueTuple<string, string, string> data)
+                {
+                    SelectedPosterUrl = data.Item1; // posterUrl
+                    SelectedFirstYear = data.Item2; // firstYear
+                    SelectedTmdbId = data.Item3; // tmdbId
+                }
+
+                // SelectedPosterUrl = url;
+                // SelectedFirstYear = img.ToolTip?.ToString();
 
                 if (img.Parent is Border clickedBorder)
                 {

@@ -11,7 +11,7 @@ namespace ReviewByWpf.Services
     {
         List<Review> GetReviews();
         Review GetReviewById(int id);
-        void UpdateReview(int id, string content, string posterUrl, string title);
+        void UpdateReview(int id, string content, string posterUrl, string title, string firstYear, string tmdbId);
         void AddReview(string title, string contetn, string posterUrl, int categoryId);
         void DeleteReview(int id);
     }

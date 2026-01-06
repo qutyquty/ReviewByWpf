@@ -26,6 +26,8 @@ namespace ReviewByWpf.Views
                 if (vm != null)
                 {
                     vm.PosterUrl = searchWindow.SelectedPosterUrl;
+                    vm.FirstYear = searchWindow.SelectedFirstYear;
+                    vm.TmdbId = searchWindow.SelectedTmdbId;
                 }
             }
         }
