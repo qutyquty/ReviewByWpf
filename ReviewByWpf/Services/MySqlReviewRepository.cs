@@ -39,13 +39,13 @@ namespace ReviewByWpf.Services
                             Id = reader.GetInt32("id"),
                             Title = reader.IsDBNull(reader.GetOrdinal("title")) ? "" : reader.GetString("title"),
                             Content = reader.IsDBNull(reader.GetOrdinal("content")) ? "" : reader.GetString("content"),
-                            PosterPath = reader.IsDBNull(reader.GetOrdinal("poster_path"))? "" : reader.GetString("poster_path"),
+                            PosterPath = reader.IsDBNull(reader.GetOrdinal("poster_path")) ? "" : reader.GetString("poster_path"),
                             CreatedTime = reader.IsDBNull(reader.GetOrdinal("created_time")) ? DateTime.MinValue : reader.GetDateTime("created_time"),
                             UpdatedTime = reader.IsDBNull(reader.GetOrdinal("updated_time")) ? DateTime.MinValue : reader.GetDateTime("updated_time"),
                             CategoryId = reader.IsDBNull(reader.GetOrdinal("category_id")) ? 0 : reader.GetInt32("category_id"),
                             FirstYear = reader.IsDBNull(reader.GetOrdinal("first_year")) ? "" : reader.GetString("first_year"),
-                            TmdbId = reader.IsDBNull(reader.GetOrdinal("tmdb_id")) ? "" : reader.GetInt32("tmdb_id").ToString()
-                        });
+                            TmdbId = reader.IsDBNull(reader.GetOrdinal("tmdb_id")) ? 0 : reader.GetInt32("tmdb_id")
+                        }); ;
                     }
                 }                
             }
@@ -82,7 +82,7 @@ namespace ReviewByWpf.Services
             return null;
         }
 
-        public void UpdateReview(int id, string content, string posterUrl, string title, string firstYear, string tmdbId)
+        public void UpdateReview(int id, string content, string posterUrl, string title, string firstYear, int tmdbId)
         {
             using (var conn = new MySqlConnection(connectionString))
             {
@@ -108,21 +108,25 @@ namespace ReviewByWpf.Services
             }
         }
 
-        public void AddReview(string title, string content, string posterUrl, int categoryId)
+        public void AddReview(string title, string content, string posterUrl, int categoryId, string firstYear, int tmdbId)
         {
             using (var conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
                 string query = "INSERT INTO review " +
-                    "(title, content, poster_path, category_id, created_time) " +
+                    "(title, content, poster_path, category_id, " + 
+                    " created_time, first_year, tmdb_id) " +
                     "values (" +
-                    "@title, @content, @posterPath, @categoryId, NOW())";
+                    "@title, @content, @posterPath, @categoryId, " +
+                    "NOW(), @firstYear, @tmdbId)";
                 using (var cmd = new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@title", title);
                     cmd.Parameters.AddWithValue("@content", content);
                     cmd.Parameters.AddWithValue("@posterPath", posterUrl);
                     cmd.Parameters.AddWithValue("@categoryId", categoryId);
+                    cmd.Parameters.AddWithValue("@firstYear", firstYear);
+                    cmd.Parameters.AddWithValue("@tmdbId", tmdbId);
                     cmd.ExecuteNonQuery();
                 }
             }

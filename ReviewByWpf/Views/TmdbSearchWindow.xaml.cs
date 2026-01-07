@@ -16,7 +16,7 @@ namespace ReviewByWpf.Views
     {
         public string SelectedPosterUrl { get; private set; }
         public string SelectedFirstYear { get; private set; }
-        public string SelectedTmdbId { get; set; }
+        public int SelectedTmdbId { get; set; }
 
         public TmdbSearchWindow()
         {
@@ -58,7 +58,7 @@ namespace ReviewByWpf.Views
                         firstYear = firstDate.Substring(0, 4);
 
                     // tmdb id 가져오기
-                    string tmdbId = mt.id;
+                    int tmdbId = mt.id;
 
                     // 포스터 가져오기
                     string posterPath = mt.poster_path;
@@ -71,8 +71,6 @@ namespace ReviewByWpf.Views
                             Height = 220,
                             Margin = new Thickness(5),
                             Source = new BitmapImage(new Uri(posterUrl)),
-                            //Tag = posterUrl,
-                            //ToolTip = firstYear,                            
                             Tag = (posterUrl, firstYear, tmdbId)
                         };
 
@@ -109,15 +107,12 @@ namespace ReviewByWpf.Views
                     }
                 }
 
-                if (img.Tag is ValueTuple<string, string, string> data)
+                if (img.Tag is ValueTuple<string, string, int> data)
                 {
                     SelectedPosterUrl = data.Item1; // posterUrl
                     SelectedFirstYear = data.Item2; // firstYear
                     SelectedTmdbId = data.Item3; // tmdbId
                 }
-
-                // SelectedPosterUrl = url;
-                // SelectedFirstYear = img.ToolTip?.ToString();
 
                 if (img.Parent is Border clickedBorder)
                 {

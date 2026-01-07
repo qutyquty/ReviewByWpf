@@ -31,7 +31,7 @@ namespace ReviewByWpf.ViewModles
                     Content = _selectedReview?.Content;
                     PosterUrl = _selectedReview?.PosterPath;
                     FirstYear = _selectedReview?.FirstYear;
-                    TmdbId = _selectedReview?.TmdbId;
+                    TmdbId = _selectedReview?.TmdbId ?? 0;
                 }
             }
         }
@@ -85,8 +85,8 @@ namespace ReviewByWpf.ViewModles
             set => SetProperty(ref _firstYear, value);
         }
 
-        private string _tmdbId;
-        public string TmdbId
+        private int _tmdbId;
+        public int TmdbId
         {
             get => _tmdbId;
             set => SetProperty(ref _tmdbId, value);
@@ -99,7 +99,6 @@ namespace ReviewByWpf.ViewModles
             get => _statusMessage;
             set => SetProperty(ref _statusMessage, value);
         }
-
 
         public ICommand SearchCommand { get; }
         public ICommand UpdateCommand { get; }
@@ -161,7 +160,8 @@ namespace ReviewByWpf.ViewModles
 
         private bool CanUpdate(object parameter)
         {
-            return !string.IsNullOrWhiteSpace(Content) && !string.IsNullOrWhiteSpace(PosterUrl);
+            // 제목, 내용은 필수 입력
+            return !string.IsNullOrWhiteSpace(Content) && !string.IsNullOrWhiteSpace(Title);
         }
 
         private void Delete(object parameter)
