@@ -84,6 +84,7 @@ namespace ReviewByWpf.Services
 
         public void UpdateReview(int id, string content, string posterUrl, string title, string firstYear, int tmdbId)
         {
+            string posterPath = posterUrl.Replace("https://image.tmdb.org/t/p/w200", "");
             using (var conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
@@ -98,7 +99,7 @@ namespace ReviewByWpf.Services
                 using (var cmd = new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@content", content);
-                    cmd.Parameters.AddWithValue("@posterPath", posterUrl);
+                    cmd.Parameters.AddWithValue("@posterPath", posterPath);
                     cmd.Parameters.AddWithValue("@title", title);
                     cmd.Parameters.AddWithValue("@firstYear", firstYear);
                     cmd.Parameters.AddWithValue("@TmdbId", tmdbId);
@@ -110,6 +111,7 @@ namespace ReviewByWpf.Services
 
         public void AddReview(string title, string content, string posterUrl, int categoryId, string firstYear, int tmdbId)
         {
+            string posterPath = posterUrl.Replace("https://image.tmdb.org/t/p/w200", "");
             using (var conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
@@ -123,7 +125,7 @@ namespace ReviewByWpf.Services
                 {
                     cmd.Parameters.AddWithValue("@title", title);
                     cmd.Parameters.AddWithValue("@content", content);
-                    cmd.Parameters.AddWithValue("@posterPath", posterUrl);
+                    cmd.Parameters.AddWithValue("@posterPath", posterPath);
                     cmd.Parameters.AddWithValue("@categoryId", categoryId);
                     cmd.Parameters.AddWithValue("@firstYear", firstYear);
                     cmd.Parameters.AddWithValue("@tmdbId", tmdbId);

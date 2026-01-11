@@ -10,6 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 
@@ -22,6 +23,14 @@
             <WrapPanel x:Name="PosterPanel" Orientation="Horizontal" />
         </ScrollViewer>
 
-        <Button Grid.Row="2" Content="포스터 선택" Margin="5" Click="ConfirmButton_Click" />
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button Content="◀ Prev" Click="PrevPage_Click" Margin="5" />
+            <TextBlock x:Name="PageInfoText" FontSize="14"
+                       VerticalAlignment="Center" Margin="5"
+                       Text="Page 1 / 1" />
+            <Button Content="Next ▶" Click="NextPage_Click" Margin="5" />
+        </StackPanel>
+
+        <Button Grid.Row="3" Content="포스터 선택" Margin="5" Click="ConfirmButton_Click" />
     </Grid>
 </Window>

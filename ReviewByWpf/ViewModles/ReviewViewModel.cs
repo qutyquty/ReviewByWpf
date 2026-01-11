@@ -29,7 +29,7 @@ namespace ReviewByWpf.ViewModles
                 {
                     Title = _selectedReview?.Title;
                     Content = _selectedReview?.Content;
-                    PosterUrl = _selectedReview?.PosterPath;
+                    PosterUrl = $"https://image.tmdb.org/t/p/w200{_selectedReview?.PosterPath}";
                     FirstYear = _selectedReview?.FirstYear;
                     TmdbId = _selectedReview?.TmdbId ?? 0;
                 }
