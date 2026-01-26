@@ -42,8 +42,8 @@ namespace ReviewByWpf.ViewModles
             set => SetProperty(ref _firstYear, value);
         }
 
-        private int _tmdbId;
-        public int TmdbId
+        private int? _tmdbId;
+        public int? TmdbId
         {
             get => _tmdbId;
             set => SetProperty(ref _tmdbId, value);

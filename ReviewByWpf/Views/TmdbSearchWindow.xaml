@@ -15,8 +15,8 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-            <TextBox x:Name="SearchTextBox" Width="300" Margin="5" />
-            <Button Content="검색" Width="100" Margin="5" Click="SearchButton_Click" />
+            <TextBox x:Name="SearchTextBox" KeyDown="SearchTextBox_KeyDown" Width="300" Margin="5" />
+            <Button x:Name="SearchButton" Content="검색" Width="100" Margin="5" Click="SearchButton_Click" />
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" Margin="10">

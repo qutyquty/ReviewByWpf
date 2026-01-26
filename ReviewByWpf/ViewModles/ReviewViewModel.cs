@@ -13,6 +13,8 @@ namespace ReviewByWpf.ViewModles
 
         private readonly IReviewRepository _repository;
 
+        public PosterSelectorViewModel PosterSelectorVM { get; } = new PosterSelectorViewModel();
+
         // 읽기 전용 속성
         public IReviewRepository Repository => _repository;
 
@@ -29,9 +31,12 @@ namespace ReviewByWpf.ViewModles
                 {
                     Title = _selectedReview?.Title;
                     Content = _selectedReview?.Content;
-                    PosterUrl = $"https://image.tmdb.org/t/p/w200{_selectedReview?.PosterPath}";
+                    PosterUrl = string.IsNullOrEmpty(_selectedReview?.PosterPath)
+                        ? "https://placehold.co/300x450.png?text=No+Image"
+                        : $"https://image.tmdb.org/t/p/w200{_selectedReview?.PosterPath}";
                     FirstYear = _selectedReview?.FirstYear;
-                    TmdbId = _selectedReview?.TmdbId ?? 0;
+                    TmdbId = _selectedReview?.TmdbId;
+                    StatusMessage = "";
                 }
             }
         }
@@ -85,8 +90,8 @@ namespace ReviewByWpf.ViewModles
             set => SetProperty(ref _firstYear, value);
         }
 
-        private int _tmdbId;
-        public int TmdbId
+        private int? _tmdbId;
+        public int? TmdbId
         {
             get => _tmdbId;
             set => SetProperty(ref _tmdbId, value);

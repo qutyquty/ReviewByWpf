@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ReviewByWpf.Views"
+        xmlns:local="clr-namespace:ReviewByWpf.Views.Controls"
         mc:Ignorable="d"
-        Title="리뷰 등록" Height="400" Width="600">
+        Title="리뷰 등록" Height="450" Width="600">
     <Grid>
         <Grid Margin="5">
             <Grid.ColumnDefinitions>
@@ -20,8 +20,12 @@
 
             <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" 
                 Orientation="Vertical" Margin="5">
-                <Image Source="{Binding PosterUrl}" Width="200" Height="250" Margin="5" />
-                <Button Content="포스터 선택" Click="PosterSelectButton_Click" Width="200" Margin="5" />
+                <!--<Image Source="{Binding PosterUrl}" Width="200" Height="250" Margin="5" />
+                <Button Content="포스터 선택" Click="PosterSelectButton_Click" Width="200" Margin="5" />-->
+                <local:PosterSelector PosterUrl="{Binding PosterUrl}"
+                                      TmdbId="{Binding TmdbId}" 
+                                      FirstYear="{Binding FirstYear}" />
+                
                 <Button Content="리뷰 저장" Command="{Binding SaveCommand}" Width="200" Margin="5" />
             </StackPanel>
 

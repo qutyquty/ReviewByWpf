@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ReviewByWpf.Views"
+        xmlns:local="clr-namespace:ReviewByWpf.Views.Controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1000">
     <Grid>
@@ -57,11 +57,11 @@
 
                 <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" 
                             Orientation="Vertical" Margin="5">
-                    <Image Source="{Binding PosterUrl}" Width="200" Height="250" Margin="5" />
-                    <TextBox Text="{Binding TmdbId}" Margin="5"
-                             TextAlignment="Center" VerticalAlignment="Center"
-                             IsReadOnly="True" />
-                    <Button Content="포스터 선택" Width="200" Margin="5" Click="PosterSelectButton_Click" />
+                    <!-- UserControl -->
+                    <local:PosterSelector PosterUrl="{Binding PosterUrl}"
+                                          TmdbId="{Binding TmdbId}"
+                                          FirstYear="{Binding FirstYear}" />
+
                     <Button Content="리뷰 수정" Command="{Binding UpdateCommand}" Width="200" Margin="5" />
                     <Button Content="리뷰 삭제" Command="{Binding DeleteCommand}" Width="200" Margin="5" />
                 </StackPanel>
@@ -71,8 +71,8 @@
                         <ColumnDefinition Width="100" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" Text="{Binding FirstYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                        FontSize="14" Padding="5" Margin="0,0,3,3" />
+                    <!--<TextBox Grid.Column="0" Text="{Binding FirstYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                        FontSize="14" Padding="5" Margin="0,0,3,3" />-->
                     <TextBox Grid.Column="1"
                         Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                         FontSize="14" Padding="5" Margin="0,0,0,3" />

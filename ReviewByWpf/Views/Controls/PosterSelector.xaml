@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="ReviewByWpf.Views.Controls.PosterSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ReviewByWpf.Views.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <StackPanel Orientation="Vertical" Margin="5">
+            <Image Source="{Binding PosterUrl, RelativeSource={RelativeSource AncestorType=UserControl}}" Width="200" Height="250" Margin="5" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding FirstYear, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" 
+                         Margin="5" TextAlignment="Center" VerticalAlignment="Center" />
+                <TextBox Grid.Column="1" Text="{Binding TmdbId, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                         Margin="0,5,5,5" TextAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" />
+            </Grid>
+            <Button Content="포스터 선택" Width="200" Margin="5" 
+                    Click="PosterSelectButton_Click" />
+        </StackPanel>
+    </Grid>
+</UserControl>

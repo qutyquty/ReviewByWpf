@@ -34,65 +34,7 @@ namespace ReviewByWpf.Views
             PosterPanel.Children.Clear(); // WrapPanel 클리어
 
             await LoadMoviesAsync(SearchTextBox.Text, 1);
-/*
-            var config = new ConfigService();
-            string apiKey = config.GetTmdbApiKey();
-            
-            using (HttpClient client = new HttpClient())
-            {
-                string url = $"https://api.themoviedb.org/3/search/multi?api_key={apiKey}&query={Uri.EscapeDataString(query)}&language=ko-KR";
-                var response = await client.GetStringAsync(url);
-                dynamic result = JsonConvert.DeserializeObject(response);
 
-                foreach (var mt in result.results)
-                {
-                    // 개봉/첫방영년도 가져오기
-                    string firstDate = "";
-                    string firstYear = "";
-                    string mediaType = mt.media_type;
-                    if (mediaType == "movie")
-                    {
-                        firstDate = mt.release_date;
-                    } else if (mediaType == "tv")
-                    {
-                        firstDate = mt.first_air_date;
-                    }
-                    if (!string.IsNullOrEmpty(firstDate))
-                        firstYear = firstDate.Substring(0, 4);
-
-                    // tmdb id 가져오기
-                    int tmdbId = mt.id;
-
-                    // 포스터 가져오기
-                    string posterPath = mt.poster_path;
-                    if (posterPath != null)
-                    {
-                        String posterUrl = $"https://image.tmdb.org/t/p/w200{posterPath}";
-                        Image img = new Image
-                        {
-                            Width = 150,
-                            Height = 220,
-                            Margin = new Thickness(5),
-                            Source = new BitmapImage(new Uri(posterUrl)),
-                            Tag = (posterUrl, firstYear, tmdbId)
-                        };
-
-                        Border border = new Border
-                        {
-                            BorderBrush = Brushes.Transparent,
-                            BorderThickness = new Thickness(0),
-                            Child = img,
-                            Margin = new Thickness(5)
-                        };
-
-                        // 포스터 클릭 이벤트 연결
-                        img.MouseLeftButtonUp += PosterImage_Click;
-
-                        PosterPanel.Children.Add(border);
-                    }
-                }
-            }
-*/
             Mouse.OverrideCursor = null;
         }
 
@@ -221,6 +163,14 @@ namespace ReviewByWpf.Views
             else
             {
                 MessageBox.Show("포스터를 선택하세요.");
+            }
+        }
+
+        private void SearchTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SearchButton_Click(SearchButton, new RoutedEventArgs());
             }
         }
     }

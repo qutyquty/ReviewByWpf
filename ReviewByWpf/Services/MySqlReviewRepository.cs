@@ -82,7 +82,7 @@ namespace ReviewByWpf.Services
             return null;
         }
 
-        public void UpdateReview(int id, string content, string posterUrl, string title, string firstYear, int tmdbId)
+        public void UpdateReview(int id, string content, string posterUrl, string title, string firstYear, int? tmdbId)
         {
             string posterPath = posterUrl.Replace("https://image.tmdb.org/t/p/w200", "");
             using (var conn = new MySqlConnection(connectionString))
@@ -109,7 +109,7 @@ namespace ReviewByWpf.Services
             }
         }
 
-        public void AddReview(string title, string content, string posterUrl, int categoryId, string firstYear, int tmdbId)
+        public void AddReview(string title, string content, string posterUrl, int categoryId, string firstYear, int? tmdbId)
         {
             string posterPath = posterUrl.Replace("https://image.tmdb.org/t/p/w200", "");
             using (var conn = new MySqlConnection(connectionString))
