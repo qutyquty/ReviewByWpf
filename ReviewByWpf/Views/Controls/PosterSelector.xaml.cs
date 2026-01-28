@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using ReviewByWpf.ViewModles;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace ReviewByWpf.Views.Controls
@@ -55,15 +56,21 @@ namespace ReviewByWpf.Views.Controls
         private void PosterSelectButton_Click(object sender, RoutedEventArgs e)
         {
             // TmdbSearchWindow 열기
-            var searchWindow = new TmdbSearchWindow();
+            var searchWindow = new TmdbSearchUpWindow();
             searchWindow.Owner = Application.Current.MainWindow;
             searchWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
             if (searchWindow.ShowDialog() == true)
             {
-                PosterUrl = searchWindow.SelectedPosterUrl;
-                TmdbId = searchWindow.SelectedTmdbId;
-                FirstYear = searchWindow.SelectedFirstYear;
+                var vm = searchWindow.DataContext as TmdbSearchUpViewModel;
+                var selected = vm.SelectedMTPoster;
+
+                if (selected != null)
+                {
+                    PosterUrl = selected.PosterUrl;
+                    TmdbId = selected.TmdbId;
+                    FirstYear = selected.FirstYear;
+                }
             }
         }
     }
